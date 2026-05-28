@@ -1,51 +1,71 @@
-/* RESET */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* FUNDO */
 body {
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #007bff, #00c6ff);
+  font-family: Arial;
+  background: linear-gradient(135deg, #1a1a1a, #333);
   min-height: 100vh;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
 
-/* CARD PRINCIPAL */
+/* CARD */
 .card {
-  background: #ffffff;
-  border-radius: 15px;
+  background: #fff;
+  border-radius: 12px;
   padding: 25px;
   width: 350px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-  text-align: left;
+  box-shadow: 0px 4px 20px rgba(0,0,0,0.3);
 }
 
-/* TITULO */
-.card h1 {
+/* LOGO */
+.logo {
   text-align: center;
-  margin-bottom: 15px;
-  color: #333;
+  margin-bottom: 10px;
 }
 
-/* DADOS */
-.card p {
-  font-size: 14px;
-  margin: 8px 0;
+.logo img {
+  width: 140px;
+}
+
+/* EMPRESA */
+.empresa {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #a4161a;
+}
+
+/* SUBTITULO */
+.subtitulo {
+  text-align: center;
+  font-size: 12px;
+  margin-bottom: 10px;
   color: #555;
 }
 
-/* LABEL */
-.card b {
+/* PRODUTO */
+h1 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+/* TEXTO */
+p {
+  margin: 6px 0;
+  font-size: 14px;
+}
+
+b {
   color: #000;
 }
 
-/* DESTACAR STATUS */
+/* STATUS */
 #status {
   font-weight: bold;
-  color: #007bff;
+  color: #0077b6;
 }
