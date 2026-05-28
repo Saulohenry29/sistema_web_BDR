@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BDR Construart - Patrimônio</title>
 
-<!-- ✅ CSS CORRETO -->
+<!-- CSS CORRETO -->
 <link rel="stylesheet" href="./css/estilo.css">
 
 </head>
@@ -14,16 +14,13 @@
 
 <div class="card">
 
-  <!-- ✅ LOGO -->
   <div class="logo">
     <img src="./imagens/logo.png" alt="Logo BDR">
   </div>
 
-  <!-- EMPRESA -->
   <h2 class="empresa">BDR CONSTRUART</h2>
   <p class="subtitulo">Controle de Patrimônio</p>
 
-  <!-- PRODUTO -->
   <h1 id="produto">Carregando...</h1>
 
   <p><b>ID:</b> <span id="codigo"></span></p>
@@ -47,7 +44,6 @@ const id = params.get("id");
 // LINK DA PLANILHA
 const url = "https://docs.google.com/spreadsheets/d/1r1K8A6RwkGXBrHWLKc3otE5G3SWHBmFSXCWfNLDs7rQ/gviz/tq?tqx=out:json";
 
-// BUSCAR DADOS
 fetch(url)
 .then(res => res.text())
 .then(data => {
@@ -71,13 +67,26 @@ fetch(url)
       document.getElementById("valor").innerText = r.c[11]?.v || "";
       document.getElementById("status").innerText = r.c[12]?.v || "";
 
-      // ✅ DATA CORRIGIDA
+      // ✅ DATA CORRIGIDA (FUNCIONA SEMPRE)
       if (r.c[1] && r.c[1].v) {
-        const d = new Date(r.c[1].v);
-        document.getElementById("data").innerText =
-          d.getDate().toString().padStart(2, '0') + "/" +
-          (d.getMonth()+1).toString().padStart(2, '0') + "/" +
-          d.getFullYear();
+
+        let dataFormatada = "";
+
+        if (typeof r.c[1].v === "string" && r.c[1].v.includes("Date")) {
+          // Quando vem como Date(2026,4,28)
+          const partes = r.c[1].v.replace("Date(", "").replace(")", "").split(",");
+          const dia = partes[2].padStart(2,'0');
+          const mes = (parseInt(partes[1]) + 1).toString().padStart(2,'0');
+          const ano = partes[0];
+
+          dataFormatada = `${dia}/${mes}/${ano}`;
+
+        } else {
+          // Quando já vem como texto (28/05/2026)
+          dataFormatada = r.c[1].v;
+        }
+
+        document.getElementById("data").innerText = dataFormatada;
       }
 
     }
@@ -90,3 +99,4 @@ fetch(url)
 
 </body>
 </html>
+``
