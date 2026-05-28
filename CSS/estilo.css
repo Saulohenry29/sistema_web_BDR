@@ -1,0 +1,51 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* FUNDO */
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #007bff, #00c6ff);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* CARD PRINCIPAL */
+.card {
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 25px;
+  width: 350px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+  text-align: left;
+}
+
+/* TITULO */
+.card h1 {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+/* DADOS */
+.card p {
+  font-size: 14px;
+  margin: 8px 0;
+  color: #555;
+}
+
+/* LABEL */
+.card b {
+  color: #000;
+}
+
+/* DESTACAR STATUS */
+#status {
+  font-weight: bold;
+  color: #007bff;
+}

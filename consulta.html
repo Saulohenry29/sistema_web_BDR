@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema Patrimônio</title>
+
+<!-- CSS EXTERNO -->
+<link rel="stylesheet" href="css/estilo.css">
+
+</head>
+
+<body>
+
+<div class="card">
+  <h1 id="produto">Carregando...</h1>
+
+  <p><b>ID:</b> <span id="codigo"></span></p>
+  <p><b>Marca:</b> <span id="marca"></span></p>
+  <p><b>Modelo:</b> <span id="modelo"></span></p>
+  <p><b>Série:</b> <span id="serie"></span></p>
+
+  <p><b>Local:</b> <span id="local"></span></p>
+  <p><b>Data:</b> <span id="data"></span></p>
+  <p><b>Valor:</b> <span id="valor"></span></p>
+  <p><b>Status:</b> <span id="status"></span></p>
+</div>
+
+<script>
+
+// PEGAR ID DA URL
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+// LINK DA PLANILHA (JSON)
+const url = "https://docs.google.com/spreadsheets/d/1r1K8A6RwkGXBrHWLKc3otE5G3SWHBmFSXCWfNLDs7rQ/gviz/tq?tqx=out:json";
+
+// BUSCAR DADOS
+fetch(url)
+.then(res => res.text())
+.then(data => {
+
+  // CONVERTE PRA JSON
+  const json = JSON.parse(data.substr(47).slice(0, -2));
+  const rows = json.table.rows;
+
+  // PERCORRE A PLANILHA
+  rows.forEach(r => {
+
+    // SE ENCONTRAR O ID
+    if(r.c[0] && r.c[0].v == id) {
+
+      document.getElementById("produto").innerText = r.c[3]?.v || "";
+      document.getElementById("codigo").innerText = r.c[0]?.v || "";
+      document.getElementById("marca").innerText = r.c[4]?.v || "";
+      document.getElementById("modelo").innerText = r.c[5]?.v || "";
+      document.getElementById("serie").innerText = r.c[6]?.v || "";
+      document.getElementById("local").innerText = r.c[9]?.v || "";
+      document.getElementById("data").innerText = r.c[1]?.v || "";
+      document.getElementById("valor").innerText = r.c[11]?.v || "";
+      document.getElementById("status").innerText = r.c[12]?.v || "";
+
+    }
+
+  });
+
+});
+
+</script>
+
+</body>
+</html>
