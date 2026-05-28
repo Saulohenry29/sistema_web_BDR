@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BDR Construart - Patrimônio</title>
 
-<!-- ✅ CAMINHO CORRETO PARA GITHUB -->
+<!-- ✅ CSS CORRETO -->
 <link rel="stylesheet" href="./css/estilo.css">
 
 </head>
@@ -14,13 +14,16 @@
 
 <div class="card">
 
+  <!-- ✅ LOGO -->
   <div class="logo">
     <img src="./imagens/logo.png" alt="Logo BDR">
   </div>
 
+  <!-- EMPRESA -->
   <h2 class="empresa">BDR CONSTRUART</h2>
   <p class="subtitulo">Controle de Patrimônio</p>
 
+  <!-- PRODUTO -->
   <h1 id="produto">Carregando...</h1>
 
   <p><b>ID:</b> <span id="codigo"></span></p>
@@ -37,11 +40,14 @@
 
 <script>
 
+// PEGAR ID DA URL
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
+// LINK DA PLANILHA
 const url = "https://docs.google.com/spreadsheets/d/1r1K8A6RwkGXBrHWLKc3otE5G3SWHBmFSXCWfNLDs7rQ/gviz/tq?tqx=out:json";
 
+// BUSCAR DADOS
 fetch(url)
 .then(res => res.text())
 .then(data => {
@@ -53,15 +59,26 @@ fetch(url)
 
     if(r.c[0] && r.c[0].v == id) {
 
+      // PRODUTO
       document.getElementById("produto").innerText = r.c[3]?.v || "";
+
+      // CAMPOS
       document.getElementById("codigo").innerText = r.c[0]?.v || "";
       document.getElementById("marca").innerText = r.c[4]?.v || "";
       document.getElementById("modelo").innerText = r.c[5]?.v || "";
       document.getElementById("serie").innerText = r.c[6]?.v || "";
       document.getElementById("local").innerText = r.c[9]?.v || "";
-      document.getElementById("data").innerText = r.c[1]?.v || "";
       document.getElementById("valor").innerText = r.c[11]?.v || "";
       document.getElementById("status").innerText = r.c[12]?.v || "";
+
+      // ✅ DATA CORRIGIDA
+      if (r.c[1] && r.c[1].v) {
+        const d = new Date(r.c[1].v);
+        document.getElementById("data").innerText =
+          d.getDate().toString().padStart(2, '0') + "/" +
+          (d.getMonth()+1).toString().padStart(2, '0') + "/" +
+          d.getFullYear();
+      }
 
     }
 
