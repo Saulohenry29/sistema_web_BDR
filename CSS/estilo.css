@@ -1,25 +1,32 @@
+/* RESET */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* FUNDO */
 body {
-  font-family: Arial;
-  background: linear-gradient(135deg, #1a1a1a, #333);
-  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background: #1a1a1a;
+
   display: flex;
   justify-content: center;
   align-items: center;
+
+  height: 100vh;
 }
 
 /* CARD */
 .card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 25px;
-  width: 350px;
-  box-shadow: 0px 4px 20px rgba(0,0,0,0.3);
+  background: #ffffff;
+  width: 90%;
+  max-width: 400px;
+
+  border-radius: 15px;
+  padding: 20px;
+
+  box-shadow: 0px 5px 25px rgba(0,0,0,0.5);
 }
 
 /* LOGO */
@@ -29,7 +36,7 @@ body {
 }
 
 .logo img {
-  width: 140px;
+  width: 120px;
 }
 
 /* EMPRESA */
@@ -58,10 +65,7 @@ h1 {
 p {
   margin: 6px 0;
   font-size: 14px;
-}
-
-b {
-  color: #000;
+  color: #333;
 }
 
 /* STATUS */
