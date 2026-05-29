@@ -16,16 +16,8 @@
   <h2 class="empresa">BDR CONSTRUART</h2>
   <p class="subtitulo">Controle de Patrimônio</p>
 
-  <h1 id="produto">Carregando...</h1>
-
-  <p><b>ID:</b> <span id="codigo"></span></p>
-  <p><b>Marca:</b> <span id="marca"></span></p>
-  <p><b>Modelo:</b> <span id="modelo"></span></p>
-  <p><b>Série:</b> <span id="serie"></span></p>
-  <p><b>Local:</b> <span id="local"></span></p>
-  <p><b>Data:</b> <span id="data"></span></p>
-  <p><b>Valor:</b> <span id="valor"></span></p>
-  <p><b>Status:</b> <span id="status"></span></p>
+  <!-- Container para múltiplos resultados -->
+  <div id="resultado">Carregando...</div>
 </div>
 
 <script>
@@ -58,19 +50,23 @@ fetch(url)
   const rows = json.table.rows;
 
   let encontrado = false;
+  let htmlResultados = "";
 
   rows.forEach(r => {
-    if(r.c[0] && r.c[0].v == id) {
+    if (r.c[0] && r.c[0].v.startsWith(id)) {
       encontrado = true;
 
-      document.getElementById("produto").innerText = r.c[3]?.v || "";
-      document.getElementById("codigo").innerText = r.c[0]?.v || "";
-      document.getElementById("marca").innerText = r.c[4]?.v || "";
-      document.getElementById("modelo").innerText = r.c[5]?.v || "";
-      document.getElementById("serie").innerText = r.c[6]?.v || "";
-      document.getElementById("local").innerText = r.c[9]?.v || "";
-      document.getElementById("valor").innerText = "R$ " + Number(r.c[11]?.v || 0).toFixed(2).replace(".", ",");
-      document.getElementById("status").innerText = r.c[12]?.v || "";
+      // Monta bloco de resultado
+      htmlResultados += `
+        <h1>${r.c[3]?.v || ""}</h1>
+        <p><b>ID:</b> ${r.c[0]?.v || ""}</p>
+        <p><b>Marca:</b> ${r.c[4]?.v || ""}</p>
+        <p><b>Modelo:</b> ${r.c[5]?.v || ""}</p>
+        <p><b>Série:</b> ${r.c[6]?.v || ""}</p>
+        <p><b>Local:</b> ${r.c[9]?.v || ""}</p>
+        <p><b>Valor:</b> R$ ${Number(r.c[11]?.v || 0).toFixed(2).replace(".", ",")}</p>
+        <p><b>Status:</b> ${r.c[12]?.v || ""}</p>
+      `;
 
       // ✅ DATA CORRIGIDA
       if (r.c[1] && r.c[1].v) {
@@ -78,19 +74,23 @@ fetch(url)
         const dia = String(dataGoogle.getDate()).padStart(2, '0');
         const mes = String(dataGoogle.getMonth() + 1).padStart(2, '0');
         const ano = dataGoogle.getFullYear();
-        document.getElementById("data").innerText = `${dia}/${mes}/${ano}`;
+        htmlResultados += `<p><b>Data:</b> ${dia}/${mes}/${ano}</p>`;
       }
+
+      htmlResultados += "<hr>";
     }
   });
 
-  // ✅ se não encontrar
-  if (!encontrado) {
-    document.getElementById("produto").innerText = "Item não encontrado";
+  // ✅ Mostrar resultados ou mensagem
+  if (encontrado) {
+    document.getElementById("resultado").innerHTML = htmlResultados;
+  } else {
+    document.getElementById("resultado").innerText = "Nenhum item encontrado para este código.";
   }
 })
 .catch(error => {
   console.error(error);
-  document.getElementById("produto").innerText = "Erro ao carregar dados";
+  document.getElementById("resultado").innerText = "Erro ao carregar dados";
 });
 </script>
 
