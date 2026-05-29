@@ -4,15 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BDR Construart - Patrimônio</title>
-
 <link rel="stylesheet" href="./css/estilo.css">
-
 </head>
-
 <body>
 
 <div class="card">
-
   <div class="logo">
     <img src="./imagens/logo.png" alt="Logo">
   </div>
@@ -26,19 +22,31 @@
   <p><b>Marca:</b> <span id="marca"></span></p>
   <p><b>Modelo:</b> <span id="modelo"></span></p>
   <p><b>Série:</b> <span id="serie"></span></p>
-
   <p><b>Local:</b> <span id="local"></span></p>
   <p><b>Data:</b> <span id="data"></span></p>
   <p><b>Valor:</b> <span id="valor"></span></p>
   <p><b>Status:</b> <span id="status"></span></p>
-
 </div>
 
 <script>
-
-// ✅ pegar ID
+// PEGAR ID DA URL
 const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
+let id = params.get("id");
+
+// 🔧 Normalizar o formato do ID
+if (id) {
+  // Caso 1: QR antigo → empresa=bdr;numero=0456
+  if (id.includes("numero=")) {
+    const numero = id.split("numero=")[1];
+    id = "PAT-" + numero;
+  }
+  // Caso 2: veio só número → 0456
+  else if (!id.startsWith("PAT-")) {
+    id = "PAT-" + id;
+  }
+} else {
+  id = "SEM-ID";
+}
 
 // ✅ URL da planilha
 const url = "https://docs.google.com/spreadsheets/d/1r1K8A6RwkGXBrHWLKc3otE5G3SWHBmFSXCWfNLDs7rQ/gviz/tq?tqx=out:json";
@@ -46,16 +54,13 @@ const url = "https://docs.google.com/spreadsheets/d/1r1K8A6RwkGXBrHWLKc3otE5G3SW
 fetch(url)
 .then(res => res.text())
 .then(data => {
-
   const json = JSON.parse(data.substring(47).slice(0, -2));
   const rows = json.table.rows;
 
   let encontrado = false;
 
   rows.forEach(r => {
-
     if(r.c[0] && r.c[0].v == id) {
-
       encontrado = true;
 
       document.getElementById("produto").innerText = r.c[3]?.v || "";
@@ -64,43 +69,29 @@ fetch(url)
       document.getElementById("modelo").innerText = r.c[5]?.v || "";
       document.getElementById("serie").innerText = r.c[6]?.v || "";
       document.getElementById("local").innerText = r.c[9]?.v || "";
-      document.getElementById("valor").innerText = r.c[11]?.v || "";
+      document.getElementById("valor").innerText = "R$ " + Number(r.c[11]?.v || 0).toFixed(2).replace(".", ",");
       document.getElementById("status").innerText = r.c[12]?.v || "";
 
       // ✅ DATA CORRIGIDA
       if (r.c[1] && r.c[1].v) {
-
-        let dataFormatada = "";
-
-        if (typeof r.c[1].v === "string" && r.c[1].v.includes("Date")) {
-          const partes = r.c[1].v.replace("Date(", "").replace(")", "").split(",");
-          const dia = partes[2].padStart(2,'0');
-          const mes = (parseInt(partes[1]) + 1).toString().padStart(2,'0');
-          const ano = partes[0];
-
-          dataFormatada = dia + "/" + mes + "/" + ano;
-        } else {
-          dataFormatada = r.c[1].v;
-        }
-
-        document.getElementById("data").innerText = dataFormatada;
+        const dataGoogle = new Date(r.c[1].f || r.c[1].v);
+        const dia = String(dataGoogle.getDate()).padStart(2, '0');
+        const mes = String(dataGoogle.getMonth() + 1).padStart(2, '0');
+        const ano = dataGoogle.getFullYear();
+        document.getElementById("data").innerText = `${dia}/${mes}/${ano}`;
       }
-
     }
-
   });
 
   // ✅ se não encontrar
   if (!encontrado) {
     document.getElementById("produto").innerText = "Item não encontrado";
   }
-
 })
 .catch(error => {
   console.error(error);
   document.getElementById("produto").innerText = "Erro ao carregar dados";
 });
-
 </script>
 
 </body>
