@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BDR Construart - Patrimônio</title>
 
-<!-- CSS CORRETO -->
 <link rel="stylesheet" href="./css/estilo.css">
 
 </head>
@@ -15,7 +14,7 @@
 <div class="card">
 
   <div class="logo">
-    <img src="./imagens/logo.png" alt="Logo BDR">
+    <img src="./imagens/logo.png" alt="Logo">
   </div>
 
   <h2 class="empresa">BDR CONSTRUART</h2>
@@ -37,11 +36,11 @@
 
 <script>
 
-// PEGAR ID DA URL
+// ✅ pegar ID
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
-// LINK DA PLANILHA
+// ✅ URL da planilha
 const url = "https://docs.google.com/spreadsheets/d/1r1K8A6RwkGXBrHWLKc3otE5G3SWHBmFSXCWfNLDs7rQ/gviz/tq?tqx=out:json";
 
 fetch(url)
@@ -51,14 +50,15 @@ fetch(url)
   const json = JSON.parse(data.substring(47).slice(0, -2));
   const rows = json.table.rows;
 
+  let encontrado = false;
+
   rows.forEach(r => {
 
     if(r.c[0] && r.c[0].v == id) {
 
-      // PRODUTO
-      document.getElementById("produto").innerText = r.c[3]?.v || "";
+      encontrado = true;
 
-      // CAMPOS
+      document.getElementById("produto").innerText = r.c[3]?.v || "";
       document.getElementById("codigo").innerText = r.c[0]?.v || "";
       document.getElementById("marca").innerText = r.c[4]?.v || "";
       document.getElementById("modelo").innerText = r.c[5]?.v || "";
@@ -67,22 +67,19 @@ fetch(url)
       document.getElementById("valor").innerText = r.c[11]?.v || "";
       document.getElementById("status").innerText = r.c[12]?.v || "";
 
-      // ✅ DATA CORRIGIDA (FUNCIONA SEMPRE)
+      // ✅ DATA CORRIGIDA
       if (r.c[1] && r.c[1].v) {
 
         let dataFormatada = "";
 
         if (typeof r.c[1].v === "string" && r.c[1].v.includes("Date")) {
-          // Quando vem como Date(2026,4,28)
           const partes = r.c[1].v.replace("Date(", "").replace(")", "").split(",");
           const dia = partes[2].padStart(2,'0');
           const mes = (parseInt(partes[1]) + 1).toString().padStart(2,'0');
           const ano = partes[0];
 
-          dataFormatada = `${dia}/${mes}/${ano}`;
-
+          dataFormatada = dia + "/" + mes + "/" + ano;
         } else {
-          // Quando já vem como texto (28/05/2026)
           dataFormatada = r.c[1].v;
         }
 
@@ -93,10 +90,18 @@ fetch(url)
 
   });
 
+  // ✅ se não encontrar
+  if (!encontrado) {
+    document.getElementById("produto").innerText = "Item não encontrado";
+  }
+
+})
+.catch(error => {
+  console.error(error);
+  document.getElementById("produto").innerText = "Erro ao carregar dados";
 });
 
 </script>
 
 </body>
 </html>
-``

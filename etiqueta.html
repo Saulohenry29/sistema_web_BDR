@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Etiqueta</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* ETIQUETA */
+.etiqueta {
+  width: 250px;
+  height: 120px;
+  border: 1px solid #000;
+  border-radius: 10px;
+  padding: 8px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* LOGO */
+.logo img {
+  width: 100px;
+}
+
+/* TITULO */
+.titulo {
+  font-size: 10px;
+  font-weight: bold;
+  margin-top: 2px;
+}
+
+/* CONTAINER */
+.conteudo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* QR */
+.qr img {
+  width: 60px;
+}
+
+/* CODIGO */
+.codigo {
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+/* ESCONDER BOTÃO NA IMPRESSÃO */
+@media print {
+  button {
+    display: none;
+  }
+}
+</style>
+
+</head>
+
+<body>
+
+<div>
+
+  <div class="etiqueta">
+
+    <div class="logo">
+      <img src="./imagens/logo.png">
+    </div>
+
+    <div class="titulo">PATRIMÔNIO</div>
+
+    <div class="conteudo">
+      <div class="qr">
+        <img id="qr">
+      </div>
+    </div>
+
+    <div class="codigo" id="codigo"></div>
+
+  </div>
+
+  <div style="text-align:center;margin-top:10px;">
+    <button onclick="window.print()">Imprimir</button>
+  </div>
+
+</div>
+
+<script>
+
+// PEGAR ID
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+// LINK DO SISTEMA
+const link = "https://saulohenry29.github.io/sistema_web_BDR/consulta.html?id=" + id;
+
+// GERAR QR
+document.getElementById("qr").src =
+  "https://quickchart.io/qr?text=" + link;
+
+// MOSTRAR CODIGO
+document.getElementById("codigo").innerText = id;
+
+</script>
+
+</body>
+</html>
